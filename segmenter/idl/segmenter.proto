@@ -1,0 +1,30 @@
+// 本文件是定义分词器的idl  通过对课程笔记实战项目学习  来实践一下
+
+
+syntax = "proto3";
+package segmenter;
+option go_package = "segmenter_demo";  // 生成的代码会存在kitex_gen/segmenter_demo目录下
+
+// 基础响应信息
+message BaseResp {
+  int64 status_code = 1; //响应的状态码
+  string status_message = 2; // 响应的状态消息
+  int64 service_time = 3; // 服务的时间
+}
+
+// 分词请求
+message SegmenterRequest {
+  string doc = 1; //要分词的内容
+  int32 n = 2;   //n-gram n元分词，如n=2，即二元分词
+}
+
+// 分词请求的 响应
+message SegmenterResponse {
+  repeated string token = 1;  //返回一个string切片
+  BaseResp base_resp = 2; // 基础响应
+}
+
+// 服务，分词，将传入的string 分成string切片
+service SegmentService {
+  rpc NGramSplit (SegmenterRequest) returns (SegmenterResponse) {}
+}
